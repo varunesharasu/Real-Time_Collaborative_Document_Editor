@@ -1,23 +1,29 @@
 import React from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { v4 as uuidV4 } from "uuid"
+
+import Login from "./pages/Login"
+import Register from "./pages/Register"
+import Dashboard from "./pages/Dashboard"
 import Editor from "./Editor"
 
 function App() {
   return (
     <BrowserRouter>
+
       <Routes>
-        <Route path="/" element={<RedirectToDocument />} />
+
+        <Route path="/" element={<Login />} />
+
+        <Route path="/register" element={<Register />} />
+
+        <Route path="/dashboard" element={<Dashboard />} />
+
         <Route path="/documents/:id" element={<Editor />} />
+
       </Routes>
+
     </BrowserRouter>
   )
-}
-
-function RedirectToDocument() {
-  const id = uuidV4()
-  window.location.href = `/documents/${id}`
-  return null
 }
 
 export default App
