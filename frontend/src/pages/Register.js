@@ -44,36 +44,42 @@ function Register() {
   }
 
   return (
-    <div className="register-page">
+    <div className="auth-page auth-page-register">
 
-      <h2>Register</h2>
+      <div className="register-page auth-card">
 
-      <form onSubmit={handleSubmit}>
+        <p className="auth-eyebrow">Create Account</p>
+        <h2>Join the Team</h2>
+        <p className="auth-subtitle">Start collaborating on documents in real-time.</p>
 
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          onChange={handleChange}
-        />
+        <form onSubmit={handleSubmit}>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-        />
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            onChange={handleChange}
+          />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-        />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+          />
 
-        <button type="submit">Register</button>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+          />
 
-      </form>
+          <button type="submit">Register</button>
+
+        </form>
+
+      </div>
 
     </div>
   )

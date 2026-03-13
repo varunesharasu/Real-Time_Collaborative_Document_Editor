@@ -3,22 +3,33 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  padding: 10px 14px;
-  border-bottom: 1px solid #e4e7ec;
-  background: #f8fafc;
+  padding: 11px 16px;
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-soft);
+  margin: 12px auto 0;
+  width: min(900px, 100%);
+  animation: fade-up 280ms ease-out;
 }
 
 .online-users h4 {
   margin: 0 8px 0 0;
   font-size: 14px;
-  color: #334155;
+  color: var(--text-main);
 }
 
 .user-badge {
-  padding: 4px 8px;
+  padding: 5px 10px;
   border-radius: 999px;
-  background: #dbeafe;
-  color: #1e3a8a;
+  background: #e8f0ff;
+  color: #1f3f9b;
   font-size: 13px;
   font-weight: 600;
+  transition: transform 140ms ease, background-color 140ms ease;
+}
+
+.user-badge:hover {
+  transform: translateY(-1px);
+  background: #dce9ff;
 }

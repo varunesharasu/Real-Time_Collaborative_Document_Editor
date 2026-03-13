@@ -1,92 +1,56 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useParams } from "react-router-dom"
-import axios from "axios"
+
 import TextEditor from "../components/TextEditor"
 import ShareModal from "../components/ShareModal"
 import OnlineUsers from "../components/OnlineUsers"
+import VersionHistory from "../components/VersionHistory"
 import "./Editor.css"
 
 function Editor() {
 
   const { id } = useParams()
 
-  const [title, setTitle] = useState("")
-  const [showShare, setShowShare] = useState(false)
   const [onlineUsers, setOnlineUsers] = useState([])
-
-  useEffect(() => {
-
-    const fetchDoc = async () => {
-
-      try {
-
-        const res = await axios.get(
-          `http://localhost:5000/api/documents/${id}`
-        )
-
-        if (res.data.title) {
-          setTitle(res.data.title)
-        }
-
-      } catch (err) {
-        console.log(err)
-      }
-
-    }
-
-    fetchDoc()
-
-  }, [id])
-
-  const updateTitle = async () => {
-
-    try {
-
-      await axios.put(
-        `http://localhost:5000/api/documents/title/${id}`,
-        { title }
-      )
-
-    } catch (err) {
-      console.log(err)
-    }
-
-  }
+  const [quillInstance, setQuillInstance] = useState(null)
+  const [showShare, setShowShare] = useState(false)
 
   return (
 
     <div className="editor-page">
 
-      <div className="editor-toolbar">
-
-        <input
-          className="editor-title-input"
-          value={title}
-          onChange={(e)=>setTitle(e.target.value)}
-          onBlur={updateTitle}
-        />
+      <header className="editor-topbar">
+        <h2 className="editor-heading">Live Collaborative Editor</h2>
 
         <button
-          className="editor-share-btn"
-          onClick={()=>setShowShare(true)}
+          className="editor-share-trigger"
+          onClick={() => setShowShare(true)}
         >
           Share
         </button>
-
-      </div>
-
-      {showShare && (
-        <ShareModal
-          documentId={id}
-        />
-      )}
+      </header>
 
       <OnlineUsers users={onlineUsers} />
 
-      <TextEditor
-        documentId={id}
-        setOnlineUsers={setOnlineUsers}
-      />
+      <main className="editor-main">
+        <TextEditor
+          documentId={id}
+          setOnlineUsers={setOnlineUsers}
+          setQuillInstance={setQuillInstance}
+        />
+
+        <VersionHistory
+          documentId={id}
+          quill={quillInstance}
+        />
+
+        {showShare && (
+          <ShareModal
+            documentId={id}
+            onClose={() => setShowShare(false)}
+          />
+        )}
+      </main>
 
     </div>
 

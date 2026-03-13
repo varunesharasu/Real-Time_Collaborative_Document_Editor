@@ -1,14 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react"
 import Quill from "quill"
+import QuillCursors from "quill-cursors"
 import "quill/dist/quill.snow.css"
 import { io } from "socket.io-client"
 import "./TextEditor.css"
+
+Quill.register("modules/cursors", QuillCursors)
 
 const SAVE_INTERVAL_MS = 2000
 
 const socket = io("http://localhost:5000")
 
-function TextEditor({ documentId, setOnlineUsers }) {
+function TextEditor({ documentId, setOnlineUsers, setQuillInstance }) {
 
   const [quill, setQuill] = useState()
 
@@ -19,14 +22,15 @@ function TextEditor({ documentId, setOnlineUsers }) {
     socket.once("load-document", document => {
 
       quill.setContents(document)
-
       quill.enable()
 
     })
 
     socket.emit("get-document", documentId)
 
-  }, [socket, quill, documentId])
+  }, [quill, documentId])
+
+
 
   useEffect(() => {
 
@@ -40,13 +44,11 @@ function TextEditor({ documentId, setOnlineUsers }) {
 
     socket.on("receive-changes", handler)
 
-    return () => {
+    return () => socket.off("receive-changes", handler)
 
-      socket.off("receive-changes", handler)
+  }, [quill])
 
-    }
 
-  }, [socket, quill])
 
   useEffect(() => {
 
@@ -62,13 +64,11 @@ function TextEditor({ documentId, setOnlineUsers }) {
 
     quill.on("text-change", handler)
 
-    return () => {
+    return () => quill.off("text-change", handler)
 
-      quill.off("text-change", handler)
+  }, [quill])
 
-    }
 
-  }, [socket, quill])
 
   useEffect(() => {
 
@@ -76,18 +76,23 @@ function TextEditor({ documentId, setOnlineUsers }) {
 
     const interval = setInterval(() => {
 
-      socket.emit("save-document", quill.getContents())
+      socket.emit(
+        "save-document",
+        quill.getContents()
+      )
 
     }, SAVE_INTERVAL_MS)
 
     return () => clearInterval(interval)
 
-  }, [socket, quill])
+  }, [quill])
 
+
+
+  // JOIN DOCUMENT
   useEffect(() => {
 
-    const user =
-      JSON.parse(localStorage.getItem("user"))
+    const user = JSON.parse(localStorage.getItem("user"))
 
     socket.emit("join-document", {
       documentId,
@@ -102,6 +107,56 @@ function TextEditor({ documentId, setOnlineUsers }) {
 
   }, [documentId])
 
+
+
+  // SEND CURSOR POSITION
+  useEffect(() => {
+
+    if (!quill) return
+
+    quill.on("selection-change", range => {
+
+      const user = JSON.parse(localStorage.getItem("user"))
+
+      socket.emit("cursor-change", {
+        documentId,
+        user,
+        range
+      })
+
+    })
+
+  }, [quill])
+
+
+
+  // RECEIVE CURSOR POSITION
+  useEffect(() => {
+
+    if (!quill) return
+
+    const cursors = quill.getModule("cursors")
+
+    socket.on("receive-cursor", data => {
+
+      const { user, range, socketId } = data
+
+      if (!range) return
+
+      cursors.createCursor(
+        socketId,
+        user.username,
+        "blue"
+      )
+
+      cursors.moveCursor(socketId, range)
+
+    })
+
+  }, [quill])
+
+
+
   const wrapperRef = useCallback(wrapper => {
 
     if (wrapper == null) return
@@ -113,25 +168,31 @@ function TextEditor({ documentId, setOnlineUsers }) {
     wrapper.append(editor)
 
     const q = new Quill(editor, {
-      theme: "snow"
+      theme: "snow",
+      modules: {
+        cursors: true,
+        toolbar: [
+          [{ header: [1, 2, false] }],
+          ["bold", "italic", "underline"],
+          ["image", "code-block"]
+        ]
+      }
     })
 
     q.disable()
-
     q.setText("Loading...")
 
     setQuill(q)
+    setQuillInstance(q)
 
   }, [])
 
   return (
-
     <div
       className="text-editor-container"
       ref={wrapperRef}
-      style={{ height:"90vh" }}
+      style={{ height: "80vh" }}
     />
-
   )
 
 }

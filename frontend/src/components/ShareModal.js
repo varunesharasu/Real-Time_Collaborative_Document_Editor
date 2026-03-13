@@ -2,16 +2,26 @@ import React, { useEffect, useState } from "react"
 import axios from "axios"
 import "./ShareModal.css"
 
-function ShareModal({ documentId }) {
+function ShareModal({ documentId, onClose }) {
 
   const [email, setEmail] = useState("")
   const [collaborators, setCollaborators] = useState([])
 
   useEffect(() => {
 
+    const fetchCollaborators = async () => {
+
+      const res = await axios.get(
+        `http://localhost:5000/api/share/collaborators/${documentId}`
+      )
+
+      setCollaborators(res.data)
+
+    }
+
     fetchCollaborators()
 
-  }, [])
+  }, [documentId])
 
   const fetchCollaborators = async () => {
 
@@ -50,42 +60,65 @@ function ShareModal({ documentId }) {
 
   return (
 
-    <div className="share-modal">
+    <div
+      className="share-modal-overlay"
+      onClick={onClose}
+    >
 
-      <h3>Share Document</h3>
+      <div
+        className="share-modal"
+        onClick={(e) => e.stopPropagation()}
+      >
 
-      <input
-        placeholder="User email"
-        value={email}
-        onChange={(e)=>setEmail(e.target.value)}
-      />
-
-      <button onClick={addCollaborator}>
-        Add
-      </button>
-
-      <h4>Collaborators</h4>
-
-      {collaborators.map(user => (
-
-        <div
-          key={user._id}
-          className="collaborator-row"
-        >
-
-          <span>
-            {user.username} ({user.email})
-          </span>
+        <div className="share-modal-header">
+          <h3>Share Document</h3>
 
           <button
-            onClick={()=>removeCollaborator(user._id)}
+            className="share-close-btn"
+            onClick={onClose}
           >
-            Remove
+            Close
           </button>
-
         </div>
 
-      ))}
+        <input
+          placeholder="User email"
+          value={email}
+          onChange={(e)=>setEmail(e.target.value)}
+        />
+
+        <button
+          className="share-add-btn"
+          onClick={addCollaborator}
+        >
+          Add
+        </button>
+
+        <h4>Collaborators</h4>
+
+        {collaborators.map(user => (
+
+          <div
+            key={user._id}
+            className="collaborator-row"
+          >
+
+            <span>
+              {user.username} ({user.email})
+            </span>
+
+            <button
+              className="share-remove-btn"
+              onClick={()=>removeCollaborator(user._id)}
+            >
+              Remove
+            </button>
+
+          </div>
+
+        ))}
+
+      </div>
 
     </div>
 

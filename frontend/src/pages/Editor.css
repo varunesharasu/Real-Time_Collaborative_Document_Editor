@@ -1,41 +1,48 @@
 .editor-page {
   min-height: 100vh;
+  padding-bottom: 18px;
+  animation: fade-up 300ms ease-out;
 }
 
-.editor-toolbar {
+.editor-topbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  border-bottom: 1px solid #d7dde8;
-  background: #ffffff;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.92);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 
-.editor-title-input {
-  width: min(520px, 72vw);
-  padding: 8px 10px;
-  border: 1px solid #cfd4dc;
-  border-radius: 8px;
-  font-size: 18px;
+.editor-heading {
+  margin: 0;
+  font-size: clamp(18px, 2.8vw, 24px);
+  color: var(--text-main);
+  letter-spacing: 0.02em;
 }
 
-.editor-title-input:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
-}
-
-.editor-share-btn {
-  padding: 8px 14px;
-  border: none;
-  border-radius: 8px;
-  background: #2563eb;
+.editor-share-trigger {
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  padding: 9px 14px;
+  background: linear-gradient(135deg, #2f6df6, #3f8df5);
   color: #ffffff;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease;
 }
 
-.editor-share-btn:hover {
-  background: #1e40af;
+.editor-share-trigger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(47, 109, 246, 0.26);
+}
+
+.editor-main {
+  width: min(1220px, 96vw);
+  margin: 14px auto 0;
 }

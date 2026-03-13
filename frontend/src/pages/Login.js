@@ -49,40 +49,46 @@ function Login() {
 
   return (
 
-    <div className="login-page">
+    <div className="auth-page auth-page-login">
 
-      <h2>Login</h2>
+      <div className="login-page auth-card">
 
-      <form onSubmit={handleSubmit}>
+        <p className="auth-eyebrow">Real-Time Workspace</p>
+        <h2>Welcome Back</h2>
+        <p className="auth-subtitle">Sign in to continue collaborating live.</p>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <form onSubmit={handleSubmit}>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-        <button type="submit">
-          Login
-        </button>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-      </form>
+          <button type="submit">
+            Login
+          </button>
 
-      <p
-        className="login-switch-link"
-        onClick={() => navigate("/register")}
-      >
-        Create a new account
-      </p>
+        </form>
+
+        <p
+          className="login-switch-link"
+          onClick={() => navigate("/register")}
+        >
+          Create a new account
+        </p>
+
+      </div>
 
     </div>
 

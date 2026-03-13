@@ -76,7 +76,10 @@ function Dashboard() {
 
     <div className="dashboard-page">
 
-      <h2 className="dashboard-title">My Documents</h2>
+      <div className="dashboard-header">
+        <p className="dashboard-kicker">Workspace</p>
+        <h2 className="dashboard-title">My Documents</h2>
+      </div>
 
       <div className="dashboard-create-doc">
 
@@ -92,37 +95,45 @@ function Dashboard() {
 
       </div>
 
-      <h3 className="dashboard-section-title">Your Documents</h3>
+      <div className="dashboard-sections">
 
-      {documents.map(doc => (
+        <section className="dashboard-section">
+          <h3 className="dashboard-section-title">Your Documents</h3>
 
-        <div
-          key={doc._id}
-          className="dashboard-doc-card"
-          onClick={()=>openDocument(doc._id)}
-        >
+          {documents.map(doc => (
 
-          {doc.title}
+            <div
+              key={doc._id}
+              className="dashboard-doc-card"
+              onClick={()=>openDocument(doc._id)}
+            >
 
-        </div>
+              {doc.title}
 
-      ))}
+            </div>
 
-      <h3 className="dashboard-section-title">Shared With You</h3>
+          ))}
+        </section>
 
-      {sharedDocs.map(doc => (
+        <section className="dashboard-section">
+          <h3 className="dashboard-section-title">Shared With You</h3>
 
-        <div
-          key={doc._id}
-          className="dashboard-doc-card"
-          onClick={()=>openDocument(doc._id)}
-        >
+          {sharedDocs.map(doc => (
 
-          {doc.title}
+            <div
+              key={doc._id}
+              className="dashboard-doc-card"
+              onClick={()=>openDocument(doc._id)}
+            >
 
-        </div>
+              {doc.title}
 
-      ))}
+            </div>
+
+          ))}
+        </section>
+
+      </div>
 
     </div>
 
