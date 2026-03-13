@@ -5,10 +5,19 @@ const DocumentSchema = new mongoose.Schema({
     type: String,
     default: "Untitled Document"
   },
+
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
   },
+
+  collaborators: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ],
+
   data: {
     type: Object,
     default: {}

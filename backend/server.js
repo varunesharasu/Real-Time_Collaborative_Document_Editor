@@ -8,14 +8,17 @@ const Document = require("./models/Document")
 
 const authRoute = require("./routes/auth")
 const documentRoute = require("./routes/documents")
+const shareRoute = require("./routes/share")
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
 
+// API Routes
 app.use("/api/auth", authRoute)
 app.use("/api/documents", documentRoute)
+app.use("/api/share", shareRoute)
 
 const server = http.createServer(app)
 
@@ -44,6 +47,8 @@ const PORT = 5000
 
 io.on("connection", socket => {
 
+  console.log("User connected:", socket.id)
+
   socket.on("get-document", async documentId => {
 
     const document = await findOrCreateDocument(documentId)
@@ -68,6 +73,23 @@ io.on("connection", socket => {
       )
 
     })
+
+  })
+
+  // Join document for presence
+  socket.on("join-document", ({ documentId, user }) => {
+
+    socket.join(documentId)
+
+    socket.to(documentId).emit("user-joined", user)
+
+  })
+
+  socket.on("disconnect", () => {
+
+    console.log("User disconnected")
+
+    socket.broadcast.emit("user-left")
 
   })
 
