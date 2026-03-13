@@ -1,0 +1,28 @@
+.text-editor-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.text-editor-container .ql-container {
+  width: min(900px, 94vw);
+  height: 600px;
+  background: #ffffff;
+}
+
+.text-editor-container .ql-toolbar {
+  width: min(900px, 94vw);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.text-editor-container .ql-container.ql-snow {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+@media (max-width: 900px) {
+  .text-editor-container .ql-container {
+    height: 65vh;
+  }
+}

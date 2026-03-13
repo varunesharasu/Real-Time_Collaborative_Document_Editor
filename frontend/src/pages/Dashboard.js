@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import "./Dashboard.css"
 
 function Dashboard() {
 
@@ -73,11 +74,11 @@ function Dashboard() {
 
   return (
 
-    <div className="dashboard">
+    <div className="dashboard-page">
 
-      <h2>My Documents</h2>
+      <h2 className="dashboard-title">My Documents</h2>
 
-      <div className="create-doc">
+      <div className="dashboard-create-doc">
 
         <input
           placeholder="Document title"
@@ -91,13 +92,13 @@ function Dashboard() {
 
       </div>
 
-      <h3>Your Documents</h3>
+      <h3 className="dashboard-section-title">Your Documents</h3>
 
       {documents.map(doc => (
 
         <div
           key={doc._id}
-          className="doc-card"
+          className="dashboard-doc-card"
           onClick={()=>openDocument(doc._id)}
         >
 
@@ -107,13 +108,13 @@ function Dashboard() {
 
       ))}
 
-      <h3>Shared With You</h3>
+      <h3 className="dashboard-section-title">Shared With You</h3>
 
       {sharedDocs.map(doc => (
 
         <div
           key={doc._id}
-          className="doc-card"
+          className="dashboard-doc-card"
           onClick={()=>openDocument(doc._id)}
         >
 

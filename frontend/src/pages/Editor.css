@@ -1,0 +1,41 @@
+.editor-page {
+  min-height: 100vh;
+}
+
+.editor-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #d7dde8;
+  background: #ffffff;
+}
+
+.editor-title-input {
+  width: min(520px, 72vw);
+  padding: 8px 10px;
+  border: 1px solid #cfd4dc;
+  border-radius: 8px;
+  font-size: 18px;
+}
+
+.editor-title-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.editor-share-btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.editor-share-btn:hover {
+  background: #1e40af;
+}

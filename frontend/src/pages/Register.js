@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import "./Register.css"
 
 function Register() {
 
@@ -43,7 +44,7 @@ function Register() {
   }
 
   return (
-    <div className="auth-container">
+    <div className="register-page">
 
       <h2>Register</h2>
 

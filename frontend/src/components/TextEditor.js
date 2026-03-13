@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react"
 import Quill from "quill"
 import "quill/dist/quill.snow.css"
 import { io } from "socket.io-client"
+import "./TextEditor.css"
 
 const SAVE_INTERVAL_MS = 2000
 
@@ -126,7 +127,7 @@ function TextEditor({ documentId, setOnlineUsers }) {
   return (
 
     <div
-      className="container"
+      className="text-editor-container"
       ref={wrapperRef}
       style={{ height:"90vh" }}
     />

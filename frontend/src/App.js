@@ -6,8 +6,6 @@ import Register from "./pages/Register"
 import Dashboard from "./pages/Dashboard"
 import Editor from "./pages/Editor"
 
-import "./styles.css"
-
 function App() {
 
   return (

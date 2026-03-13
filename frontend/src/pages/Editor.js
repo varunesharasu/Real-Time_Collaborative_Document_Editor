@@ -4,6 +4,7 @@ import axios from "axios"
 import TextEditor from "../components/TextEditor"
 import ShareModal from "../components/ShareModal"
 import OnlineUsers from "../components/OnlineUsers"
+import "./Editor.css"
 
 function Editor() {
 
@@ -54,28 +55,19 @@ function Editor() {
 
   return (
 
-    <div>
+    <div className="editor-page">
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "10px",
-          borderBottom: "1px solid #ddd"
-        }}
-      >
+      <div className="editor-toolbar">
 
         <input
+          className="editor-title-input"
           value={title}
           onChange={(e)=>setTitle(e.target.value)}
           onBlur={updateTitle}
-          style={{
-            fontSize:"18px",
-            padding:"5px"
-          }}
         />
 
         <button
+          className="editor-share-btn"
           onClick={()=>setShowShare(true)}
         >
           Share

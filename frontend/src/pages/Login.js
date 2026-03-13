@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import "./Login.css"
 
 function Login() {
 
@@ -48,7 +49,7 @@ function Login() {
 
   return (
 
-    <div className="auth-container">
+    <div className="login-page">
 
       <h2>Login</h2>
 
@@ -77,7 +78,7 @@ function Login() {
       </form>
 
       <p
-        style={{ cursor: "pointer", marginTop: "10px" }}
+        className="login-switch-link"
         onClick={() => navigate("/register")}
       >
         Create a new account
