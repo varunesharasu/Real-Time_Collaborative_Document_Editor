@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { v4 as uuidV4 } from "uuid"
+import Editor from "./Editor"
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<RedirectToDocument />} />
+        <Route path="/documents/:id" element={<Editor />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
-export default App;
+function RedirectToDocument() {
+  const id = uuidV4()
+  window.location.href = `/documents/${id}`
+  return null
+}
+
+export default App
