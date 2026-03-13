@@ -7,36 +7,67 @@ function Dashboard() {
   const navigate = useNavigate()
 
   const [documents, setDocuments] = useState([])
+  const [sharedDocs, setSharedDocs] = useState([])
+  const [title, setTitle] = useState("")
 
   const user = JSON.parse(localStorage.getItem("user"))
 
   useEffect(() => {
 
-    const fetchDocs = async () => {
-
-      const res = await axios.get(
-        `http://localhost:5000/api/documents/user/${user.id}`
-      )
-
-      setDocuments(res.data)
-
-    }
-
-    fetchDocs()
+    fetchDocuments()
 
   }, [])
 
+  const fetchDocuments = async () => {
+
+    try {
+
+      // documents owned by user
+      const res1 = await axios.get(
+        `http://localhost:5000/api/documents/user/${user.id}`
+      )
+
+      // documents shared with user
+      const res2 = await axios.get(
+        `http://localhost:5000/api/documents/shared/${user.id}`
+      )
+
+      setDocuments(res1.data)
+      setSharedDocs(res2.data)
+
+    } catch (err) {
+
+      console.log(err)
+
+    }
+
+  }
+
   const createDocument = async () => {
 
-    const res = await axios.post(
-      "http://localhost:5000/api/documents/create",
-      {
-        title: "New Document",
-        userId: user.id
-      }
-    )
+    try {
 
-    navigate(`/documents/${res.data._id}`)
+      const res = await axios.post(
+        "http://localhost:5000/api/documents/create",
+        {
+          title,
+          userId: user.id
+        }
+      )
+
+      navigate(`/documents/${res.data._id}`)
+
+    } catch (err) {
+
+      console.log(err)
+
+    }
+
+  }
+
+  const openDocument = (id) => {
+
+    navigate(`/documents/${id}`)
 
   }
 
@@ -44,28 +75,53 @@ function Dashboard() {
 
     <div className="dashboard">
 
-      <h1>Your Documents</h1>
+      <h2>My Documents</h2>
 
-      <button onClick={createDocument}>
-        Create New Document
-      </button>
+      <div className="create-doc">
 
-      <ul>
+        <input
+          placeholder="Document title"
+          value={title}
+          onChange={(e)=>setTitle(e.target.value)}
+        />
 
-        {documents.map(doc => (
+        <button onClick={createDocument}>
+          Create
+        </button>
 
-          <li
-            key={doc._id}
-            onClick={() => navigate(`/documents/${doc._id}`)}
-          >
+      </div>
 
-            {doc.title}
+      <h3>Your Documents</h3>
 
-          </li>
+      {documents.map(doc => (
 
-        ))}
+        <div
+          key={doc._id}
+          className="doc-card"
+          onClick={()=>openDocument(doc._id)}
+        >
 
-      </ul>
+          {doc.title}
+
+        </div>
+
+      ))}
+
+      <h3>Shared With You</h3>
+
+      {sharedDocs.map(doc => (
+
+        <div
+          key={doc._id}
+          className="doc-card"
+          onClick={()=>openDocument(doc._id)}
+        >
+
+          {doc.title}
+
+        </div>
+
+      ))}
 
     </div>
 

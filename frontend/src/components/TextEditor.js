@@ -1,36 +1,26 @@
 import React, { useCallback, useEffect, useState } from "react"
-import { io } from "socket.io-client"
 import Quill from "quill"
+import "quill/dist/quill.snow.css"
+import { io } from "socket.io-client"
 
 const SAVE_INTERVAL_MS = 2000
-const TOOLBAR_OPTIONS = [
-  [{ header: [1, 2, false] }],
-  ["bold", "italic", "underline"],
-  [{ list: "ordered" }, { list: "bullet" }],
-  ["link", "image"],
-  ["clean"]
-]
 
-export default function TextEditor({ documentId }) {
+const socket = io("http://localhost:5000")
 
-  const [socket, setSocket] = useState()
+function TextEditor({ documentId, setOnlineUsers }) {
+
   const [quill, setQuill] = useState()
 
   useEffect(() => {
-    const s = io("http://localhost:5000")
-    setSocket(s)
 
-    return () => {
-      s.disconnect()
-    }
-  }, [])
-
-  useEffect(() => {
     if (socket == null || quill == null) return
 
     socket.once("load-document", document => {
+
       quill.setContents(document)
+
       quill.enable()
+
     })
 
     socket.emit("get-document", documentId)
@@ -38,47 +28,78 @@ export default function TextEditor({ documentId }) {
   }, [socket, quill, documentId])
 
   useEffect(() => {
+
     if (socket == null || quill == null) return
 
     const handler = delta => {
+
       quill.updateContents(delta)
+
     }
 
     socket.on("receive-changes", handler)
 
     return () => {
+
       socket.off("receive-changes", handler)
+
     }
 
   }, [socket, quill])
 
   useEffect(() => {
+
     if (socket == null || quill == null) return
 
-    const handler = delta => {
+    const handler = (delta, oldDelta, source) => {
+
+      if (source !== "user") return
+
       socket.emit("send-changes", delta)
+
     }
 
     quill.on("text-change", handler)
 
     return () => {
+
       quill.off("text-change", handler)
+
     }
 
   }, [socket, quill])
 
   useEffect(() => {
+
     if (socket == null || quill == null) return
 
     const interval = setInterval(() => {
+
       socket.emit("save-document", quill.getContents())
+
     }, SAVE_INTERVAL_MS)
 
-    return () => {
-      clearInterval(interval)
-    }
+    return () => clearInterval(interval)
 
   }, [socket, quill])
+
+  useEffect(() => {
+
+    const user =
+      JSON.parse(localStorage.getItem("user"))
+
+    socket.emit("join-document", {
+      documentId,
+      user
+    })
+
+    socket.on("online-users", users => {
+
+      setOnlineUsers(users)
+
+    })
+
+  }, [documentId])
 
   const wrapperRef = useCallback(wrapper => {
 
@@ -87,20 +108,31 @@ export default function TextEditor({ documentId }) {
     wrapper.innerHTML = ""
 
     const editor = document.createElement("div")
+
     wrapper.append(editor)
 
     const q = new Quill(editor, {
-      theme: "snow",
-      modules: { toolbar: TOOLBAR_OPTIONS }
+      theme: "snow"
     })
 
     q.disable()
+
     q.setText("Loading...")
+
     setQuill(q)
 
   }, [])
 
   return (
-    <div className="container" ref={wrapperRef}></div>
+
+    <div
+      className="container"
+      ref={wrapperRef}
+      style={{ height:"90vh" }}
+    />
+
   )
+
 }
+
+export default TextEditor

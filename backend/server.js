@@ -29,9 +29,11 @@ const io = new Server(server, {
   }
 })
 
+const PORT = 5000
 const defaultValue = {}
 
-// MongoDB connection
+const onlineUsers = {}
+
 mongoose
   .connect(
     "mongodb+srv://varunesh:varunesh@cluster1.lvoka.mongodb.net/documents?retryWrites=true&w=majority"
@@ -39,11 +41,7 @@ mongoose
   .then(() => {
     console.log("MongoDB connected")
   })
-  .catch(error => {
-    console.error("MongoDB connection error:", error)
-  })
-
-const PORT = 5000
+  .catch(err => console.log(err))
 
 io.on("connection", socket => {
 
@@ -76,20 +74,45 @@ io.on("connection", socket => {
 
   })
 
-  // Join document for presence
   socket.on("join-document", ({ documentId, user }) => {
 
     socket.join(documentId)
 
-    socket.to(documentId).emit("user-joined", user)
+    if (!onlineUsers[documentId]) {
+      onlineUsers[documentId] = []
+    }
+
+    const userData = {
+      username: user.username,
+      socketId: socket.id
+    }
+
+    onlineUsers[documentId].push(userData)
+
+    io.to(documentId).emit(
+      "online-users",
+      onlineUsers[documentId]
+    )
 
   })
 
   socket.on("disconnect", () => {
 
-    console.log("User disconnected")
+    for (const doc in onlineUsers) {
 
-    socket.broadcast.emit("user-left")
+      onlineUsers[doc] =
+        onlineUsers[doc].filter(
+          u => u.socketId !== socket.id
+        )
+
+      io.to(doc).emit(
+        "online-users",
+        onlineUsers[doc]
+      )
+
+    }
+
+    console.log("User disconnected")
 
   })
 

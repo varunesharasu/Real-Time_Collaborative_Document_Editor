@@ -10,13 +10,11 @@ router.post("/add-collaborator", async (req, res) => {
 
     const user = await User.findOne({ email })
 
-    if (!user)
-      return res.status(404).json("User not found")
+    if (!user) return res.status(404).json("User not found")
 
     const doc = await Document.findById(documentId)
 
-    if (!doc)
-      return res.status(404).json("Document not found")
+    if (!doc) return res.status(404).json("Document not found")
 
     if (!doc.collaborators.includes(user._id)) {
 
