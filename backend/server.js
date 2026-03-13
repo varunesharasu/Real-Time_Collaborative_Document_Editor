@@ -5,9 +5,14 @@ const http = require("http")
 const { Server } = require("socket.io")
 
 const Document = require("./models/Document")
+const authRoute = require("./routes/auth")
 
 const app = express()
+
 app.use(cors())
+app.use(express.json())
+
+app.use("/api/auth", authRoute)
 
 const server = http.createServer(app)
 
@@ -51,7 +56,9 @@ io.on("connection", socket => {
     socket.on("save-document", async data => {
       await Document.findByIdAndUpdate(documentId, { data })
     })
+
   })
+
 })
 
 async function findOrCreateDocument(id) {
@@ -66,6 +73,7 @@ async function findOrCreateDocument(id) {
     _id: id,
     data: defaultValue
   })
+
 }
 
 server.listen(PORT, () => {
