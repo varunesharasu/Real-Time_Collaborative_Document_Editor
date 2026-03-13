@@ -21,6 +21,12 @@ body {
   text-align: center;
 }
 
+.auth-container {
+  width: 300px;
+  margin: 100px auto;
+  text-align: center;
+}
+
 .auth-container input {
   width: 100%;
   padding: 10px;
@@ -30,11 +36,6 @@ body {
 .auth-container button {
   padding: 10px;
   width: 100%;
-}
-
-.dashboard {
-  text-align: center;
-  margin-top: 100px;
 }
 
 .dashboard ul {
