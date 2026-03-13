@@ -5,7 +5,9 @@ const http = require("http")
 const { Server } = require("socket.io")
 
 const Document = require("./models/Document")
+
 const authRoute = require("./routes/auth")
+const documentRoute = require("./routes/documents")
 
 const app = express()
 
@@ -13,6 +15,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use("/api/auth", authRoute)
+app.use("/api/documents", documentRoute)
 
 const server = http.createServer(app)
 
@@ -23,7 +26,7 @@ const io = new Server(server, {
   }
 })
 
-const defaultValue = ""
+const defaultValue = {}
 
 // MongoDB connection
 mongoose
@@ -50,11 +53,20 @@ io.on("connection", socket => {
     socket.emit("load-document", document.data)
 
     socket.on("send-changes", delta => {
-      socket.broadcast.to(documentId).emit("receive-changes", delta)
+
+      socket.broadcast
+        .to(documentId)
+        .emit("receive-changes", delta)
+
     })
 
     socket.on("save-document", async data => {
-      await Document.findByIdAndUpdate(documentId, { data })
+
+      await Document.findByIdAndUpdate(
+        documentId,
+        { data }
+      )
+
     })
 
   })
