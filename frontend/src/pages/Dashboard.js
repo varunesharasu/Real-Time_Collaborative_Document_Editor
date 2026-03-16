@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import "./Dashboard.css"
@@ -13,13 +13,9 @@ function Dashboard() {
 
   const user = JSON.parse(localStorage.getItem("user"))
 
-  useEffect(() => {
+  const fetchDocuments = useCallback(async () => {
 
-    fetchDocuments()
-
-  }, [])
-
-  const fetchDocuments = async () => {
+    if (!user?.id) return
 
     try {
 
@@ -42,7 +38,13 @@ function Dashboard() {
 
     }
 
-  }
+  }, [user?.id])
+
+  useEffect(() => {
+
+    fetchDocuments()
+
+  }, [fetchDocuments])
 
   const createDocument = async () => {
 

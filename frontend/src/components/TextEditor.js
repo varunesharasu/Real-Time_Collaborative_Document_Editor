@@ -94,18 +94,22 @@ function TextEditor({ documentId, setOnlineUsers, setQuillInstance }) {
 
     const user = JSON.parse(localStorage.getItem("user"))
 
+    const handleOnlineUsers = users => {
+
+      setOnlineUsers(users)
+
+    }
+
     socket.emit("join-document", {
       documentId,
       user
     })
 
-    socket.on("online-users", users => {
+    socket.on("online-users", handleOnlineUsers)
 
-      setOnlineUsers(users)
+    return () => socket.off("online-users", handleOnlineUsers)
 
-    })
-
-  }, [documentId])
+  }, [documentId, setOnlineUsers])
 
 
 
@@ -114,7 +118,7 @@ function TextEditor({ documentId, setOnlineUsers, setQuillInstance }) {
 
     if (!quill) return
 
-    quill.on("selection-change", range => {
+    const handleSelectionChange = range => {
 
       const user = JSON.parse(localStorage.getItem("user"))
 
@@ -124,9 +128,13 @@ function TextEditor({ documentId, setOnlineUsers, setQuillInstance }) {
         range
       })
 
-    })
+    }
 
-  }, [quill])
+    quill.on("selection-change", handleSelectionChange)
+
+    return () => quill.off("selection-change", handleSelectionChange)
+
+  }, [documentId, quill])
 
 
 
@@ -137,7 +145,7 @@ function TextEditor({ documentId, setOnlineUsers, setQuillInstance }) {
 
     const cursors = quill.getModule("cursors")
 
-    socket.on("receive-cursor", data => {
+    const handleReceiveCursor = data => {
 
       const { user, range, socketId } = data
 
@@ -151,7 +159,11 @@ function TextEditor({ documentId, setOnlineUsers, setQuillInstance }) {
 
       cursors.moveCursor(socketId, range)
 
-    })
+    }
+
+    socket.on("receive-cursor", handleReceiveCursor)
+
+    return () => socket.off("receive-cursor", handleReceiveCursor)
 
   }, [quill])
 
@@ -185,7 +197,7 @@ function TextEditor({ documentId, setOnlineUsers, setQuillInstance }) {
     setQuill(q)
     setQuillInstance(q)
 
-  }, [])
+  }, [setQuillInstance])
 
   return (
     <div
