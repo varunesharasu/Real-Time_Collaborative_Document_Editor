@@ -12,7 +12,7 @@ function VersionHistory({ documentId, quill }) {
     const fetchVersions = async () => {
 
       const res = await axios.get(
-        `http://localhost:5000/api/versions/${documentId}`
+        `https://real-time-collaborative-document-editor-9lkv.onrender.com/api/versions/${documentId}`
       )
 
       setVersions(res.data)

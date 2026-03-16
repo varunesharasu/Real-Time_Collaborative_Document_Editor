@@ -12,7 +12,7 @@ function ShareModal({ documentId, onClose }) {
     const fetchCollaborators = async () => {
 
       const res = await axios.get(
-        `http://localhost:5000/api/share/collaborators/${documentId}`
+        `https://real-time-collaborative-document-editor-9lkv.onrender.com/api/share/collaborators/${documentId}`
       )
 
       setCollaborators(res.data)
@@ -26,7 +26,7 @@ function ShareModal({ documentId, onClose }) {
   const fetchCollaborators = async () => {
 
     const res = await axios.get(
-      `http://localhost:5000/api/share/collaborators/${documentId}`
+      `https://real-time-collaborative-document-editor-9lkv.onrender.com/api/share/collaborators/${documentId}`
     )
 
     setCollaborators(res.data)
@@ -36,7 +36,7 @@ function ShareModal({ documentId, onClose }) {
   const addCollaborator = async () => {
 
     await axios.post(
-      "http://localhost:5000/api/share/add-collaborator",
+      "https://real-time-collaborative-document-editor-9lkv.onrender.com/api/share/add-collaborator",
       {
         documentId,
         email
@@ -51,7 +51,7 @@ function ShareModal({ documentId, onClose }) {
   const removeCollaborator = async (userId) => {
 
     await axios.delete(
-      `http://localhost:5000/api/share/remove/${documentId}/${userId}`
+      `https://real-time-collaborative-document-editor-9lkv.onrender.com/api/share/remove/${documentId}/${userId}`
     )
 
     fetchCollaborators()

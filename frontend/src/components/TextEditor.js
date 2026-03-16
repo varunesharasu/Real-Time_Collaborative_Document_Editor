@@ -9,7 +9,7 @@ Quill.register("modules/cursors", QuillCursors)
 
 const SAVE_INTERVAL_MS = 2000
 
-const socket = io("http://localhost:5000")
+const socket = io("https://real-time-collaborative-document-editor-9lkv.onrender.com")
 
 function TextEditor({ documentId, setOnlineUsers, setQuillInstance }) {
 

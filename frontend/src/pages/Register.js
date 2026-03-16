@@ -27,7 +27,7 @@ function Register() {
     try {
 
       await axios.post(
-        "http://localhost:5000/api/auth/register",
+        "https://real-time-collaborative-document-editor-9lkv.onrender.com/api/auth/register",
         user
       )
 

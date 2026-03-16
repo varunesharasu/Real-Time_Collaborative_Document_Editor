@@ -25,12 +25,12 @@ function Dashboard() {
 
       // documents owned by user
       const res1 = await axios.get(
-        `http://localhost:5000/api/documents/user/${user.id}`
+        `https://real-time-collaborative-document-editor-9lkv.onrender.com/api/documents/user/${user.id}`
       )
 
       // documents shared with user
       const res2 = await axios.get(
-        `http://localhost:5000/api/documents/shared/${user.id}`
+        `https://real-time-collaborative-document-editor-9lkv.onrender.com/api/documents/shared/${user.id}`
       )
 
       setDocuments(res1.data)
@@ -49,7 +49,7 @@ function Dashboard() {
     try {
 
       const res = await axios.post(
-        "http://localhost:5000/api/documents/create",
+        "https://real-time-collaborative-document-editor-9lkv.onrender.com/api/documents/create",
         {
           title,
           userId: user.id
