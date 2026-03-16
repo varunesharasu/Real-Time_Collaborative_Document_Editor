@@ -1,48 +1,194 @@
 .editor-page {
   min-height: 100vh;
-  padding-bottom: 18px;
-  animation: fade-up 300ms ease-out;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-main);
 }
 
 .editor-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 18px;
+  gap: 16px;
+  padding: 12px 18px;
   border-bottom: 1px solid var(--border-light);
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--bg-surface);
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 30;
+  animation: slide-down 300ms ease;
+}
+
+.editor-topbar-left,
+.editor-topbar-center,
+.editor-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.editor-topbar-left {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.editor-topbar-center {
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
+}
+
+.editor-topbar-right {
+  flex: 0 0 auto;
+  justify-content: flex-end;
+}
+
+.back-btn {
+  padding: 8px 8px;
+  border: 1.5px solid var(--border-light);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.back-btn:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
 }
 
 .editor-heading {
   margin: 0;
-  font-size: clamp(18px, 2.8vw, 24px);
-  color: var(--text-main);
-  letter-spacing: 0.02em;
-}
-
-.editor-share-trigger {
-  border: 1px solid var(--border-light);
-  border-radius: 10px;
-  padding: 9px 14px;
-  background: linear-gradient(135deg, #2f6df6, #3f8df5);
-  color: #ffffff;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 700;
+  color: var(--text-main);
   cursor: pointer;
-  transition: transform 150ms ease, box-shadow 150ms ease;
+  transition: color 150ms ease;
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.editor-share-trigger:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 18px rgba(47, 109, 246, 0.26);
+.editor-heading:hover {
+  color: var(--primary);
+}
+
+.title-input {
+  padding: 6px 8px;
+  border: 1.5px solid var(--primary);
+  border-radius: 6px;
+  background: var(--primary-light);
+  color: var(--text-main);
+  font-size: 16px;
+  font-weight: 700;
+  outline: none;
+  max-width: 300px;
+}
+
+.editor-version-btn,
+.editor-share-btn {
+  padding: 8px 12px;
+  border: 1.5px solid var(--border-light);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 150ms ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.editor-version-btn:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.editor-share-btn {
+  background: linear-gradient(135deg, var(--primary), #2563eb);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+.editor-share-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.25);
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border-color: #1d4ed8;
+}
+
+.share-icon {
+  font-size: 14px;
 }
 
 .editor-main {
-  width: min(1220px, 96vw);
-  margin: 14px auto 0;
+  flex: 1;
+  width: min(1280px, 96vw);
+  margin: 16px auto 0;
+  display: flex;
+  flex-direction: column;
+  animation: fade-up 500ms ease-out;
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .editor-topbar {
+    flex-wrap: wrap;
+  }
+
+  .editor-topbar-center {
+    order: 3;
+    width: 100%;
+  }
+
+  .editor-heading {
+    max-width: 180px;
+  }
+
+  .editor-main {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .editor-topbar {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .editor-heading {
+    font-size: 16px;
+    max-width: 140px;
+  }
+
+  .editor-version-btn,
+  .editor-share-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .editor-topbar-right {
+    gap: 6px;
+  }
 }
