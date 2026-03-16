@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react"
+import React, { useMemo } from "react"
 import DocumentService from "../utils/DocumentService"
 import FormattingService from "../utils/FormattingService"
 import "./DocumentStats.css"

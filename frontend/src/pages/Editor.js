@@ -38,6 +38,18 @@ function Editor() {
     }
   }
 
+  // Export document in various formats
+  const handleExportDocument = useCallback((format) => {
+    if (!quillInstance) {
+      showToast("Document not ready", "error")
+      return
+    }
+
+    const content = quillInstance.root.innerHTML
+    DocumentService.exportDocument(documentTitle, content, format)
+    showToast(`Document exported as ${format.toUpperCase()}`, "success")
+  }, [quillInstance, documentTitle])
+
   // Handle keyboard shortcuts
   const handleKeyDown = useCallback((e) => {
     if (e.ctrlKey || e.metaKey) {
@@ -52,19 +64,7 @@ function Editor() {
         handleExportDocument("txt")
       }
     }
-  }, [showFindReplace, showStats])
-
-  // Export document in various formats
-  const handleExportDocument = useCallback((format) => {
-    if (!quillInstance) {
-      showToast("Document not ready", "error")
-      return
-    }
-
-    const content = quillInstance.root.innerHTML
-    DocumentService.exportDocument(documentTitle, content, format)
-    showToast(`Document exported as ${format.toUpperCase()}`, "success")
-  }, [quillInstance, documentTitle])
+  }, [showFindReplace, showStats, handleExportDocument])
 
   // Print document
   const handlePrintDocument = useCallback(() => {

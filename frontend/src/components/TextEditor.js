@@ -53,7 +53,7 @@ function TextEditor({
 
     return () => socket.off("receive-changes", handler)
 
-  }, [quill])
+  }, [quill, setDocumentContent])
 
 
 
@@ -78,7 +78,7 @@ function TextEditor({
 
     return () => quill.off("text-change", handler)
 
-  }, [quill])
+  }, [quill, setDocumentContent])
 
 
 
