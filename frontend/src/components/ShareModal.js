@@ -12,14 +12,12 @@ import "./ShareModal.css"
 function ShareModal({ documentId, onClose }) {
   const [email, setEmail] = useState("")
   const [collaborators, setCollaborators] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
   const [isAddingCollaborator, setIsAddingCollaborator] = useState(false)
   const [emailError, setEmailError] = useState("")
 
   // Fetch collaborators on mount
   useEffect(() => {
     const fetchCollaborators = async () => {
-      setIsLoading(true)
       try {
         const res = await axios.get(
           `https://real-time-collaborative-document-editor-9lkv.onrender.com/api/share/collaborators/${documentId}`
@@ -28,8 +26,6 @@ function ShareModal({ documentId, onClose }) {
       } catch (err) {
         console.error(err)
         showToast("Failed to load collaborators", "error")
-      } finally {
-        setIsLoading(false)
       }
     }
 
