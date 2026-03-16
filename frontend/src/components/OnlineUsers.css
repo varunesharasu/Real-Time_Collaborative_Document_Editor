@@ -1,35 +1,66 @@
 .online-users {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 11px 16px;
-  border: 1px solid var(--border-light);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: var(--shadow-soft);
-  margin: 12px auto 0;
-  width: min(900px, 100%);
-  animation: fade-up 280ms ease-out;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 1.5px solid var(--border-light);
+  border-radius: 10px;
+  background: var(--bg-surface);
+  animation: fade-up 300ms ease-out;
 }
 
-.online-users h4 {
-  margin: 0 8px 0 0;
-  font-size: 14px;
-  color: var(--text-main);
-}
-
-.user-badge {
-  padding: 5px 10px;
-  border-radius: 999px;
-  background: #e8f0ff;
-  color: #1f3f9b;
-  font-size: 13px;
+.online-users-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
   font-weight: 600;
-  transition: transform 140ms ease, background-color 140ms ease;
+  color: var(--text-secondary);
+  white-space: nowrap;
 }
 
-.user-badge:hover {
-  transform: translateY(-1px);
-  background: #dce9ff;
+.online-indicator-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--success);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.online-count {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.online-users-avatars {
+  display: flex;
+  align-items: center;
+  gap: -6px;
+  margin-left: auto;
+}
+
+.user-avatar-wrapper {
+  display: flex;
+  align-items: center;
+  margin-left: -6px;
+  transition: all 150ms ease;
+}
+
+.user-avatar-wrapper:first-child {
+  margin-left: 0;
+}
+
+.user-avatar-wrapper:hover {
+  z-index: 10;
+  transform: scale(1.1);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }

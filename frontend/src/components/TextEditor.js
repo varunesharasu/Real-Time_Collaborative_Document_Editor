@@ -3,6 +3,8 @@ import Quill from "quill"
 import QuillCursors from "quill-cursors"
 import "quill/dist/quill.snow.css"
 import { io } from "socket.io-client"
+import LoadingSpinner from "./LoadingSpinner"
+import { showToast } from "../utils/Toast"
 import "./TextEditor.css"
 
 Quill.register("modules/cursors", QuillCursors)
@@ -11,24 +13,29 @@ const SAVE_INTERVAL_MS = 2000
 
 const socket = io("https://real-time-collaborative-document-editor-9lkv.onrender.com")
 
-function TextEditor({ documentId, setOnlineUsers, setQuillInstance }) {
-
+function TextEditor({ 
+  documentId, 
+  setOnlineUsers, 
+  setQuillInstance,
+  setSaveStatus,
+  setLastSavedTime 
+}) {
   const [quill, setQuill] = useState()
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-
     if (socket == null || quill == null) return
 
     socket.once("load-document", document => {
-
       quill.setContents(document)
       quill.enable()
-
+      setIsLoading(false)
+      setSaveStatus && setSaveStatus("saved")
     })
 
     socket.emit("get-document", documentId)
 
-  }, [quill, documentId])
+  }, [quill, documentId, setSaveStatus])
 
 
 
@@ -71,21 +78,29 @@ function TextEditor({ documentId, setOnlineUsers, setQuillInstance }) {
 
 
   useEffect(() => {
-
     if (socket == null || quill == null) return
 
     const interval = setInterval(() => {
-
+      setSaveStatus && setSaveStatus("saving")
+      
       socket.emit(
         "save-document",
         quill.getContents()
       )
 
+      setTimeout(() => {
+        setSaveStatus && setSaveStatus("saved")
+        setLastSavedTime && setLastSavedTime(new Date().toLocaleTimeString([], { 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        }))
+      }, 300)
+
     }, SAVE_INTERVAL_MS)
 
     return () => clearInterval(interval)
 
-  }, [quill])
+  }, [quill, setSaveStatus, setLastSavedTime])
 
 
 
@@ -170,13 +185,11 @@ function TextEditor({ documentId, setOnlineUsers, setQuillInstance }) {
 
 
   const wrapperRef = useCallback(wrapper => {
-
     if (wrapper == null) return
 
     wrapper.innerHTML = ""
 
     const editor = document.createElement("div")
-
     wrapper.append(editor)
 
     const q = new Quill(editor, {
@@ -185,14 +198,18 @@ function TextEditor({ documentId, setOnlineUsers, setQuillInstance }) {
         cursors: true,
         toolbar: [
           [{ header: [1, 2, false] }],
-          ["bold", "italic", "underline"],
-          ["image", "code-block"]
+          ["bold", "italic", "underline", "strike"],
+          ["blockquote", "code-block"],
+          ["link", "image"],
+          [{ list: "ordered" }, { list: "bullet" }],
+          [{ align: [] }],
+          ["clean"]
         ]
       }
     })
 
     q.disable()
-    q.setText("Loading...")
+    setIsLoading(true)
 
     setQuill(q)
     setQuillInstance(q)
@@ -200,13 +217,20 @@ function TextEditor({ documentId, setOnlineUsers, setQuillInstance }) {
   }, [setQuillInstance])
 
   return (
-    <div
-      className="text-editor-container"
-      ref={wrapperRef}
-      style={{ height: "80vh" }}
-    />
+    <>
+      {isLoading && <LoadingSpinner variant="small" message="" />}
+      <div
+        className="text-editor-container"
+        ref={wrapperRef}
+        style={{ 
+          height: "100%",
+          minHeight: "500px",
+          opacity: isLoading ? 0.5 : 1,
+          transition: "opacity 200ms ease"
+        }}
+      />
+    </>
   )
-
 }
 
 export default TextEditor

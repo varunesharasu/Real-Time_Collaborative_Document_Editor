@@ -1,0 +1,63 @@
+.save-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 200ms ease;
+  height: fit-content;
+}
+
+.save-indicator-saved {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.save-indicator-saving {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.save-indicator-unsaved {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.save-indicator-error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.save-indicator-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  min-width: 14px;
+}
+
+.spinner-mini {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin-mini 0.6s linear infinite;
+}
+
+.save-indicator-text {
+  white-space: nowrap;
+}
+
+@keyframes spin-mini {
+  to {
+    transform: rotate(360deg);
+  }
+}
