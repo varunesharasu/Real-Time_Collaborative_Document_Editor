@@ -4,7 +4,6 @@ import QuillCursors from "quill-cursors"
 import "quill/dist/quill.snow.css"
 import { io } from "socket.io-client"
 import LoadingSpinner from "./LoadingSpinner"
-import { showToast } from "../utils/Toast"
 import "./TextEditor.css"
 
 Quill.register("modules/cursors", QuillCursors)
@@ -18,7 +17,8 @@ function TextEditor({
   setOnlineUsers, 
   setQuillInstance,
   setSaveStatus,
-  setLastSavedTime 
+  setLastSavedTime,
+  setDocumentContent
 }) {
   const [quill, setQuill] = useState()
   const [isLoading, setIsLoading] = useState(true)
@@ -66,6 +66,11 @@ function TextEditor({
       if (source !== "user") return
 
       socket.emit("send-changes", delta)
+      
+      // Update document content for stats and other features
+      if (setDocumentContent) {
+        setDocumentContent(quill.root.innerHTML)
+      }
 
     }
 
